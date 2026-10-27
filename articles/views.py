@@ -8,3 +8,6 @@ def hello_world(request):
 
 def hello_name (request, name):
     return HttpResponse(f"Hello <h1>{name}</h1>")
+
+def about_me_view(request):
+    return HttpResponse("<h1>Привет!!!</h1>")
