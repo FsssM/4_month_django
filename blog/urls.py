@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from articles.views import hello_name, hello_world, about_me_view, articles_list
+from articles.views import hello_name, hello_world, about_me_view, articles_list, CatalogListView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -26,4 +26,5 @@ urlpatterns = [
     path("hello/<str:name>", hello_name),
     path("about/", about_me_view),
     path("", articles_list),
+    path("catalog/", CatalogListView.as_view(), name="catalog_list"),
 ]

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Наш Каталог</title>
+</head>
+<body>
+    <h1>Список категорий каталога</h1>
+    <ul>
+        {% for item in catalogs %}
+            <li>{{ item.name }}</li>
+        {% endfor %}
+    </ul>
+    
+    {% if not catalogs %}
+        <p>Каталог пока пуст. Добавьте элементы через админку</p>
+    {% endif %}
+</body>
+</html>
