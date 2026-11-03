@@ -28,3 +28,16 @@ class CatalogListView(ListView):
     model = Catalog
     template_name = 'articles/catalog_list.html'
     context_object_name = 'catalogs'
+
+    articles_list = Article.objects.all()
+
+    articles_list = Article.objects.all()
+
+def articles_list(request: HttpRequest) -> HttpResponse:
+    
+    return render(request, "articles/list.html", {"articles": articles_list})
+
+
+def article_detail(request: HttpRequest, id: int) -> HttpResponse:
+    article = Article.objects.get(id=id)
+    return render(request, "articles/detail.html", {"article": article})
