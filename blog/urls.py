@@ -28,6 +28,7 @@ from articles.views import (
     articles_list,
     homework_one_view,
     CatalogListView,
+    AddCommentView,
 )
 
 urlpatterns = [
@@ -39,6 +40,7 @@ urlpatterns = [
     path("create", article_create, name="article_create"),
     path("homework1/", homework_one_view, name="homework_one"),
     path("catalog/", CatalogListView.as_view(), name="catalog_list"),
+    path("articles/<int:pk>/comment/", AddCommentView.as_view(), name="add_comment"),
 ]
 
 

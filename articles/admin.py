@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from articles.models import Article, Category
+from articles.models import Article, Category, Comment
 
 from .models import Catalog
 # Register your models here.
@@ -9,3 +9,4 @@ from .models import Catalog
 admin.site.register(Article)
 admin.site.register(Category)
 admin.site.register(Catalog)
+admin.site.register(Comment)

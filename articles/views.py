@@ -8,6 +8,10 @@ from articles.models import Article
 from django.views.generic import ListView
 from .models import Catalog
 
+from django.shortcuts import redirect, get_object_or_404
+from django.views.generic import View
+from .models import Article, Comment
+
 def articles_list(request: HttpRequest) -> HttpResponse:
     articles_list = Article.objects.all()
 
@@ -55,3 +59,15 @@ class CatalogListView(ListView):
     model = Catalog
     template_name = 'articles/catalog_list.html'
     context_object_name = 'catalogs'
+
+
+class AddCommentView(View):
+    def post(self, request, pk):
+        article = get_object_or_404(Article, pk=pk)
+        author = request.POST.get('author_name')
+        text = request.POST.get('text')
+        
+        if author and text:
+            Comment.objects.create(article=article, author_name=author, text=text)
+            
+        return redirect('article detail', pk=pk)
