@@ -43,3 +43,7 @@ def article_delete(request: HttpRequest, id: int) -> HttpResponse:
         return redirect("article_list")
 
     return render(request, "articles/delete.html", context={"article": article})
+
+
+def homework_one_view(request):
+    return render(request, "articles/homework_one.html")
