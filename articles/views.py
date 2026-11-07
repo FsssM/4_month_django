@@ -5,6 +5,8 @@ from django.shortcuts import redirect, render
 from articles.forms import ArticleForm
 from articles.models import Article
 
+from django.views.generic import ListView
+from .models import Catalog
 
 def articles_list(request: HttpRequest) -> HttpResponse:
     articles_list = Article.objects.all()
@@ -47,3 +49,9 @@ def article_delete(request: HttpRequest, id: int) -> HttpResponse:
 
 def homework_one_view(request):
     return render(request, "articles/homework_one.html")
+
+
+class CatalogListView(ListView):
+    model = Catalog
+    template_name = 'articles/catalog_list.html'
+    context_object_name = 'catalogs'

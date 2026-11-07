@@ -27,6 +27,7 @@ from articles.views import (
     article_edit,
     articles_list,
     homework_one_view,
+    CatalogListView,
 )
 
 urlpatterns = [
@@ -37,6 +38,7 @@ urlpatterns = [
     path("<int:id>/delete", article_delete, name="article_delete"),
     path("create", article_create, name="article_create"),
     path("homework1/", homework_one_view, name="homework_one"),
+    path("catalog/", CatalogListView.as_view(), name="catalog_list"),
 ]
 
 

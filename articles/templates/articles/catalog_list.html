@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Наш Каталог{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm p-4">
+    <h2 class="text-success fw-bold mb-3">Список категорий каталога</h2>
+    <ul class="list-group list-group-flush mb-3">
+        {% for item in catalogs %}
+            <li class="list-group-item fs-5">🔥 {{ item.name }}</li>
+        {% empty %}
+            <li class="list-group-item text-muted">Каталог пока пуст. Добавьте элементы через админку</li>
+        {% endfor %}
+    </ul>
+    
+    {% if not catalogs %}
+        <p class="text-muted small">Зайдите на /admin/, выберите таблицу Catalogs и нажмите "Добавить".</p>
+    {% endif %}
+</div>
+{% endblock %}
