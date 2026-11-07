@@ -26,11 +26,9 @@
 <article class="card shadow-sm">
 
     <!-- Обложка: пока заглушка. Когда появится поле image — раскомментируйте блок ниже -->
-    {% comment %}
     {% if article.image %}
         <img src="{{ article.image.url }}" class="card-img-top article-cover" alt="{{ article.title }}">
     {% else %}
-    {% endcomment %}
         <svg class="card-img-top article-cover bg-body-secondary" height="300"
              xmlns="http://www.w3.org/2000/svg" role="img"
              aria-label="Изображение отсутствует" preserveAspectRatio="xMidYMid slice">
@@ -39,9 +37,7 @@
             <text x="50%" y="50%" fill="#6c757d" dominant-baseline="middle"
                   text-anchor="middle" font-size="20">Нет изображения</text>
         </svg>
-    {% comment %}
     {% endif %}
-    {% endcomment %}
 
     <div class="card-body p-4">
 
@@ -79,11 +75,8 @@
 
         {% if user.is_authenticated %}
         <div class="d-flex gap-2">
-            <a href="#" class="btn btn-outline-primary">Редактировать</a>
-            <button type="button" class="btn btn-outline-danger"
-                    data-bs-toggle="modal" data-bs-target="#deleteModal">
-                Удалить
-            </button>
+            <a href="{% url 'article_edit' article.pk %}" class="btn btn-outline-primary">Редактировать</a>
+<a href="{% url 'article_delete' article.pk %}" class="btn btn-outline-primary">Удалить</a>
         </div>
         {% endif %}
     </div>
