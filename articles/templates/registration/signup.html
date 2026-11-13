@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация — Blog{% endblock %}
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm mx-auto" style="max-width: 480px;">
+  <div class="card-body p-4">
+    <h1 class="h4 mb-4">Регистрация</h1>
+
+    <form method="post" class="auth-form" novalidate>
+      {% csrf_token %}
+      {% include "includes/auth_form.html" %}
+      <button type="submit" class="btn btn-primary w-100">Создать аккаунт</button>
+    </form>
+
+    <hr>
+    <p class="small mb-0">Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+  </div>
+</div>
+{% endblock %}
