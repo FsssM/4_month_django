@@ -6,8 +6,7 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, View
-
-from articles.forms import ArticleForm
+from articles.forms import ArticleForm, CommentForm
 from articles.models import Article, Catalog, Comment
 
 def articles_list(request: HttpRequest) -> HttpResponse:
@@ -21,7 +20,8 @@ def articles_list(request: HttpRequest) -> HttpResponse:
 
 def article_detail(request: HttpRequest, id: int) -> HttpResponse:
     article = get_object_or_404(Article, id=id)
-    return render(request, "articles/detail.html", {"article": article})
+    form = CommentForm()
+    return render(request, "articles/detail.html", {"article": article, "form": form})
 
 
 @login_required
@@ -88,8 +88,6 @@ def my_articles(request: HttpRequest):
     return render(request, "articles/list.html", {"articles": articles})
 
 
-# === ТВОИ ДОМАШКИ ЗА 1–4 УРОКИ ===
-
 def homework_one_view(request):
     return render(request, "articles/homework_one.html")
 
@@ -100,13 +98,33 @@ class CatalogListView(ListView):
     context_object_name = 'catalogs'
 
 
-class AddCommentView(View):
-    def post(self, request, pk):
-        article = get_object_or_404(Article, pk=pk)
-        author = request.POST.get('author_name')
-        text = request.POST.get('text')
-        
-        if author and text:
-            Comment.objects.create(article=article, author_name=author, text=text)
-            
-        return redirect('article_detail', pk=pk)
+def add_comment(request: HttpRequest, id: int) -> HttpResponse:
+    article = get_object_or_404(Article, id=id)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.article = article
+            comment.save()
+            return redirect("article_detail", id=article.id)
+        return render(request, "articles/detail.html", {"article": article, "form": form})
+    return redirect("article_detail", id=article.id)
+
+
+def comment_edit(request: HttpRequest, id: int) -> HttpResponse:
+    comment = get_object_or_404(Comment, id=id)
+    form = CommentForm(request.POST or None, instance=comment)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("article_detail", id=comment.article.id)
+    return render(request, "articles/comment_edit.html", {"form": form, "comment": comment})
+
+
+def comment_delete(request: HttpRequest, id: int) -> HttpResponse:
+    comment = get_object_or_404(Comment, id=id)
+    article_id = comment.article.id
+    if request.method == "POST":
+        comment.delete()
+        return redirect("article_detail", id=article_id)
+    return render(request, "articles/comment_delete.html", {"comment": comment})
+

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Удалить комментарий{% endblock %}
+{% block content %}
+<div class="card shadow-sm p-4 border-danger">
+    <h3 class="text-danger fw-bold mb-3">Удалить комментарий?</h3>
+    <p>Точно удалить комментарий от <strong>{{ comment.author_name }}</strong>: «{{ comment.text }}»?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Да, удалить</button>
+        <a href="{% url 'article_detail' comment.article.id %}" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+{% endblock %}

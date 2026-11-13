@@ -28,7 +28,9 @@ from articles.views import (
     articles_list,
     homework_one_view,
     CatalogListView,
-    AddCommentView,
+    add_comment,
+    comment_edit,
+    comment_delete,
     my_articles,
     signup,
 )
@@ -45,7 +47,10 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("homework1/", homework_one_view, name="homework_one"),
     path("catalog/", CatalogListView.as_view(), name="catalog_list"),
-    path("articles/<int:pk>/comment/", AddCommentView.as_view(), name="add_comment"),
+    path("articles/<int:id>/comment/", add_comment, name="add_comment"),
+    path("comments/<int:id>/edit/", comment_edit, name="comment_edit"),
+    path("comments/<int:id>/delete/", comment_delete, name="comment_delete"),
+
 ]
 
 
