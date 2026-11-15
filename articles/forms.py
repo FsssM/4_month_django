@@ -32,22 +32,22 @@ class ArticleForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ["author_name", "text"]
+        fields = ["text"]
         widgets = {
-            "author_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "Ваше имя"}),
-            "text": forms.Textarea(attrs={"class": "form-control", "rows": 3, "placeholder": "Текст комментария"}),
+            "text": forms.Textarea(attrs={"class": "form-control", "rows": 3, "placeholder": "Напишите комментарий..."}),
         }
 
     def clean_text(self):
         text = self.cleaned_data.get("text", "").strip()
         if len(text) < 5:
-            raise forms.ValidationError("Комментарий должен быть минимум из 5 символов!")
+            raise forms.ValidationError("Комментарий должен быть минимум 5 символов!")
         
-        banned_words = ["спам", "наркотики", "реклама"]
+        banned_words = ["спам", "дурак", "реклама"]
         for word in banned_words:
             if word in text.lower():
                 raise forms.ValidationError(f"Слово «{word}» запрещено!")
         return text
+
 
     def clean_author_name(self):
         author = self.cleaned_data.get("author_name", "").strip()

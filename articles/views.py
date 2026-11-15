@@ -6,8 +6,10 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, View
+
 from articles.forms import ArticleForm, CommentForm
 from articles.models import Article, Catalog, Comment
+
 
 def articles_list(request: HttpRequest) -> HttpResponse:
     articles = Article.objects.filter()
@@ -98,6 +100,7 @@ class CatalogListView(ListView):
     context_object_name = 'catalogs'
 
 
+@login_required
 def add_comment(request: HttpRequest, id: int) -> HttpResponse:
     article = get_object_or_404(Article, id=id)
     if request.method == "POST":
@@ -105,14 +108,20 @@ def add_comment(request: HttpRequest, id: int) -> HttpResponse:
         if form.is_valid():
             comment = form.save(commit=False)
             comment.article = article
+            comment.user = request.user
             comment.save()
             return redirect("article_detail", id=article.id)
         return render(request, "articles/detail.html", {"article": article, "form": form})
     return redirect("article_detail", id=article.id)
 
 
+@login_required
 def comment_edit(request: HttpRequest, id: int) -> HttpResponse:
     comment = get_object_or_404(Comment, id=id)
+    if comment.user != request.user:
+        messages.error(request, "Это не ваш комментарий!")
+        return redirect("article_detail", id=comment.article.id)
+
     form = CommentForm(request.POST or None, instance=comment)
     if request.method == "POST" and form.is_valid():
         form.save()
@@ -120,11 +129,21 @@ def comment_edit(request: HttpRequest, id: int) -> HttpResponse:
     return render(request, "articles/comment_edit.html", {"form": form, "comment": comment})
 
 
+@login_required
 def comment_delete(request: HttpRequest, id: int) -> HttpResponse:
     comment = get_object_or_404(Comment, id=id)
     article_id = comment.article.id
+    if comment.user != request.user:
+        messages.error(request, "Это не ваш комментарий!")
+        return redirect("article_detail", id=article_id)
+
     if request.method == "POST":
         comment.delete()
         return redirect("article_detail", id=article_id)
     return render(request, "articles/comment_delete.html", {"comment": comment})
 
+
+@login_required
+def my_comments(request: HttpRequest) -> HttpResponse:
+    comments = Comment.objects.filter(user=request.user)
+    return render(request, "articles/my_comments.html", {"comments": comments})

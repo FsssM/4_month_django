@@ -33,6 +33,7 @@ from articles.views import (
     comment_delete,
     my_articles,
     signup,
+    my_comments,
 )
 
 urlpatterns = [
@@ -50,6 +51,7 @@ urlpatterns = [
     path("articles/<int:id>/comment/", add_comment, name="add_comment"),
     path("comments/<int:id>/edit/", comment_edit, name="comment_edit"),
     path("comments/<int:id>/delete/", comment_delete, name="comment_delete"),
+    path("my-comments/", my_comments, name="my_comments"),
 
 ]
 
