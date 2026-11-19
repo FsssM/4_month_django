@@ -1,61 +1,42 @@
-"""
-URL configuration for blog project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
 from articles.views import (
-    article_create,
-    article_delete,
-    article_detail,
-    article_edit,
-    articles_list,
-    homework_one_view,
+    AddCommentView,
+    ArticleCreateView,
+    ArticleDeleteView,
+    ArticleDetailView,
+    ArticleListView,
+    ArticleUpdateView,
     CatalogListView,
-    add_comment,
-    comment_edit,
-    comment_delete,
-    my_articles,
-    signup,
-    my_comments,
+    CommentDeleteView,
+    CommentUpdateView,
+    HomeworkOneView,
+    MyArticlesView,
+    MyCommentsView,
+    SignUpView,
 )
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", articles_list, name="article_list"),
-    path("my_articles/", my_articles, name="my_articles"),
-    path("<int:id>/detail", article_detail, name="article_detail"),
-    path("<int:id>/edit", article_edit, name="article_edit"),
-    path("<int:id>/delete", article_delete, name="article_delete"),
-    path("create", article_create, name="article_create"),
-    path("accounts/signup/", signup, name="signup"),
+    path("", ArticleListView.as_view(), name="article_list"),
+    path("my_articles/", MyArticlesView.as_view(), name="my_articles"),
+    path("<int:id>/detail", ArticleDetailView.as_view(), name="article_detail"),
+    path("<int:id>/edit", ArticleUpdateView.as_view(), name="article_edit"),
+    path("<int:id>/delete", ArticleDeleteView.as_view(), name="article_delete"),
+    path("create", ArticleCreateView.as_view(), name="article_create"),
+    path("accounts/signup/", SignUpView.as_view(), name="signup"),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("homework1/", homework_one_view, name="homework_one"),
+    path("homework1/", HomeworkOneView.as_view(), name="homework_one"),
     path("catalog/", CatalogListView.as_view(), name="catalog_list"),
-    path("articles/<int:id>/comment/", add_comment, name="add_comment"),
-    path("comments/<int:id>/edit/", comment_edit, name="comment_edit"),
-    path("comments/<int:id>/delete/", comment_delete, name="comment_delete"),
-    path("my-comments/", my_comments, name="my_comments"),
-
+    path("articles/<int:id>/comment/", AddCommentView.as_view(), name="add_comment"),
+    path("comments/<int:id>/edit/", CommentUpdateView.as_view(), name="comment_edit"),
+    path("comments/<int:id>/delete/", CommentDeleteView.as_view(), name="comment_delete"),
+    path("my-comments/", MyCommentsView.as_view(), name="my_comments"),
 ]
 
-
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, dcoument_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
